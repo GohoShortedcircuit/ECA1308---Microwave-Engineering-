@@ -1,0 +1,41 @@
+% =========================================================
+% PROBLEM 1: TE10 FIELD PLOT (HIGH-CONTRAST BLACK THEME)
+% =========================================================
+clc; clear; close all;
+
+% Parameters (WR-90 Waveguide)[cite: 1]
+a = 22.86;  b = 10.16;  L = 100;    % Dimensions in mm[cite: 1]
+f = 10e9;   c = 3e8;                % 10 GHz operating frequency[cite: 1]
+
+fc = c / (2 * (a * 1e-3));          % Cutoff frequency[cite: 1]
+beta = (2 * pi * f / c) * sqrt(1 - (fc / f)^2); % rad/m[cite: 1]
+beta_mm = beta / 1e3;               % rad/mm
+
+% Grid in z-x plane
+[Z, X] = meshgrid(linspace(0, L, 60), linspace(0, a, 30));
+
+% Field Equations
+E  = sin(pi * X / a) .* sin(beta_mm * Z);
+Hx = -sin(pi * X / a) .* sin(beta_mm * Z);
+Hz =  cos(pi * X / a) .* cos(beta_mm * Z);
+
+% Figure Setup (Black Background)
+fig1 = figure('Color', 'k', 'Name', 'TE10 Dark Field Plot');
+
+% 1. E-Field Intensity Heatmap
+ax1 = subplot(2, 1, 1);
+imagesc(linspace(0, L, 60), linspace(0, a, 30), abs(E));
+colormap(ax1, 'turbo'); cb1 = colorbar;
+set(ax1, 'Color', 'k', 'XColor', 'w', 'YColor', 'w');
+set(cb1, 'Color', 'w');
+axis tight;
+title('Electric Field Magnitude (|E|) - TE_{10}', 'Color', 'w', 'FontSize', 11);
+xlabel('z (length, mm)', 'Color', 'w'); ylabel('x (width, mm)', 'Color', 'w');
+
+% 2. H-Field Vectors (Bright Cyan Arrows on Black)
+ax2 = subplot(2, 1, 2);
+quiver(Z, X, Hz, Hx, 1.2, 'Color', [0 1 1], 'LineWidth', 1.2);
+set(ax2, 'Color', 'k', 'XColor', 'w', 'YColor', 'w');
+axis tight;
+title('Magnetic Field Vector Loops (H) - TE_{10}', 'Color', 'w', 'FontSize', 11);
+xlabel('z (length, mm)', 'Color', 'w'); ylabel('x (width, mm)', 'Color', 'w');
