@@ -1,0 +1,36 @@
+% =========================================================
+% PROBLEM 2: TE10 VS TM11 COMPARISON (BLACK THEME)
+% =========================================================
+clc; clear; close all;
+
+% Dimensions (WR-90 Waveguide)[cite: 1]
+a = 22.86;  b = 10.16;              % in mm[cite: 1]
+
+[X, Y] = meshgrid(linspace(0, a, 50), linspace(0, b, 30));
+
+% E-Field Cross-Section Equations
+E_TE10 = sin(pi * X / a);
+E_TM11 = sin(pi * X / a) .* sin(pi * Y / b);
+
+% Figure Setup (Black Background)
+figure('Color', 'k', 'Name', 'TE10 vs TM11 Dark Comparison');
+
+% 1. TE10 Cross-Section
+ax1 = subplot(1, 2, 1);
+contourf(X, Y, abs(E_TE10), 30, 'LineColor', 'none');
+colormap(ax1, 'turbo'); cb1 = colorbar;
+set(ax1, 'Color', 'k', 'XColor', 'w', 'YColor', 'w');
+set(cb1, 'Color', 'w');
+axis equal tight;
+title('TE_{10} Mode (|E_y|) - Propagates', 'Color', 'w', 'FontSize', 11);
+xlabel('x (mm)', 'Color', 'w'); ylabel('y (mm)', 'Color', 'w');
+
+% 2. TM11 Cross-Section
+ax2 = subplot(1, 2, 2);
+contourf(X, Y, abs(E_TM11), 30, 'LineColor', 'none');
+colormap(ax2, 'turbo'); cb2 = colorbar;
+set(ax2, 'Color', 'k', 'XColor', 'w', 'YColor', 'w');
+set(cb2, 'Color', 'w');
+axis equal tight;
+title('TM_{11} Mode (|E_z|) - Cutoff', 'Color', 'w', 'FontSize', 11);
+xlabel('x (mm)', 'Color', 'w'); ylabel('y (mm)', 'Color', 'w');
